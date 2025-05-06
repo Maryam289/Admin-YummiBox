@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Admin YummiBox</string>
+    <string name="default_web_client_id">169101048756-43vv13fvblu1imqcdm57ns21d283k6r2.apps.googleusercontent.com</string>
+
 </resources>

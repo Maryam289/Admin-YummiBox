@@ -84,7 +84,7 @@
         android:drawableLeft="@drawable/user"
         android:drawablePadding="10dp"
         android:elevation="2dp"
-        android:hint="Name"
+        android:hint="Name Of Owner"
         android:inputType="textPersonName"
         android:outlineSpotShadowColor="@color/titleColor"
         android:paddingLeft="10dp"
@@ -94,7 +94,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
     <EditText
-        android:id="@+id/nameOfResturant"
+        android:id="@+id/nameOfRestaurant"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
@@ -113,7 +113,7 @@
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <EditText
-        android:id="@+id/email"
+        android:id="@+id/emailOrPhone"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
@@ -122,14 +122,14 @@
         android:fontFamily="@font/lato_regular"
         android:drawablePadding="10dp"
         android:elevation="2dp"
-        android:hint="Email"
+        android:hint="Email Or Phone Number"
         android:inputType="textEmailAddress"
         android:outlineSpotShadowColor="@color/titleColor"
         android:paddingLeft="10dp"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="@+id/nameOfResturant"
-        app:layout_constraintStart_toStartOf="@+id/nameOfResturant"
-        app:layout_constraintTop_toBottomOf="@+id/nameOfResturant" />
+        app:layout_constraintEnd_toEndOf="@+id/nameOfRestaurant"
+        app:layout_constraintStart_toStartOf="@+id/nameOfRestaurant"
+        app:layout_constraintTop_toBottomOf="@+id/nameOfRestaurant" />
 
     <EditText
         android:id="@+id/password"
@@ -148,9 +148,9 @@
         android:outlineSpotShadowColor="@color/titleColor"
         android:paddingLeft="10dp"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="@+id/email"
-        app:layout_constraintStart_toStartOf="@+id/email"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        app:layout_constraintEnd_toEndOf="@+id/emailOrPhone"
+        app:layout_constraintStart_toStartOf="@+id/emailOrPhone"
+        app:layout_constraintTop_toBottomOf="@+id/emailOrPhone" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/createButton"

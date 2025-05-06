@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "169101048756",
+    "firebase_url": "https://yummibox-default-rtdb.firebaseio.com",
+    "project_id": "yummibox",
+    "storage_bucket": "yummibox.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169101048756:android:4ef8b2f3ed26627ee310e1",
+        "android_client_info": {
+          "package_name": "com.example.adminyummibox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "169101048756-43vv13fvblu1imqcdm57ns21d283k6r2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.adminyummibox",
+            "certificate_hash": "3a0bec1915867c41911335a26e2c00ff78820273"
+          }
+        },
+        {
+          "client_id": "169101048756-3l6s2hf9vmg3vb8pjj5ol5pf6cofj8bm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBo07UCLsIK2uaiOBL23le7xh4vFTbFFys"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "169101048756-3l6s2hf9vmg3vb8pjj5ol5pf6cofj8bm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
