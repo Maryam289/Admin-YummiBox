@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.kotlin.compiler.plugin.compose)
+//    id("com.google.gms.google-services")
+
 }
 
 android {
@@ -83,6 +85,8 @@ dependencies {
     implementation(libs.play.services.base)
     implementation(libs.play.services.auth)
     implementation(libs.firebase.storage)
+    implementation(libs.androidx.datastore.core.android)
+    implementation(libs.play.services.auth)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -99,9 +103,21 @@ dependencies {
 //    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
 
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    
+
+    implementation("com.google.firebase:firebase-auth:22.3.0")
+    implementation("com.google.firebase:firebase-database:20.3.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    implementation("io.github.jan-tennert.supabase:gotrue-kt:1.2.0")
+    implementation("io.github.jan-tennert.supabase:storage-kt:1.2.0")
+    implementation("io.ktor:ktor-client-okhttp:2.3.0")
+
 }

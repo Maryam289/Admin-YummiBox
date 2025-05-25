@@ -3,16 +3,23 @@ package com.example.adminyummibox
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.adminyummibox.databinding.ActivityAddItemBinding
 import com.example.adminyummibox.model.AllMenu
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.storage.FirebaseStorage
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import java.io.IOException
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
+import com.example.adminyummibox.utils.SupabaseClient
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import okhttp3.MediaType.Companion.toMediaTypeOrNull as toMediaTypeOrNull1
 
 class AddItemActivity : AppCompatActivity() {
 
@@ -49,8 +56,8 @@ class AddItemActivity : AppCompatActivity() {
 
             if (!(foodName.isBlank() || foodPrice.isBlank() || foodDescription.isBlank() || foodIngredint.isBlank())) {
                 uploadData()
-                Toast.makeText(this, "Item Added Successfully", Toast.LENGTH_SHORT).show()
-                finish()
+//                Toast.makeText(this, "Item Added Successfully", Toast.LENGTH_SHORT).show()
+//                finish()
             } else {
                 Toast.makeText(this, "Fill all the details", Toast.LENGTH_SHORT).show()
             }
@@ -65,119 +72,80 @@ class AddItemActivity : AppCompatActivity() {
     }
 
     private fun uploadData() {
-//        get a reference to the "menu" node in the database
         val menuRef = database.getReference("menu")
-//        Generate a unique key for the new menu item
         val newItemKey = menuRef.push().key
 
-        if (foodImageUri != null) {
-            val storageRef = FirebaseStorage.getInstance().reference
-            val imageRef = storageRef.child("menu_images/${newItemKey}.jpg")
-            val uploadTask = imageRef.putFile(foodImageUri!!)
+        if (foodImageUri != null && newItemKey != null) {
+            //  استخدم Supabase بدل Firebase Storage
+            uploadImageToSupabase(foodImageUri!!) { imageUrl ->
+                val newItem = AllMenu(
+                    foodName = foodName,
+                    foodPrice = foodPrice,
+                    foodDescription = foodDescription,
+                    foodIngredient = foodIngredint,
+                    foodImage = imageUrl
+                )
 
-//        if (foodImageUri != null && newItemKey != null) {
-//            // Convert URI to byte array
-//            val inputStream = contentResolver.openInputStream(foodImageUri!!)
-//            val fileBytes = inputStream?.readBytes()
-//            inputStream?.close()
-
-
-            uploadTask.addOnSuccessListener {
-                imageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
-//                    create a new menu item
-                    val newItem = AllMenu(
-                        foodName = foodName,
-                        foodPrice = foodPrice,
-                        foodDescription = foodDescription,
-                        foodIngredient = foodIngredint,
-                        foodImage = downloadUrl.toString(),
-                    )
-                    newItemKey?.let { key ->
-                        menuRef.child(key).setValue(newItem).addOnSuccessListener {
-                            Toast.makeText(this, "Data Uploaded Successfully", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                            .addOnFailureListener {
-                                Toast.makeText(this, "Data Uploaded Failed", Toast.LENGTH_SHORT)
-                                    .show()
-                            }
+                menuRef.child(newItemKey).setValue(newItem)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Data Uploaded Successfully 🤗", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Item Added Successfully", Toast.LENGTH_SHORT).show()
+                        finish()
                     }
-                }
+                    .addOnFailureListener {
+                        Toast.makeText(this, "Data Uploaded Failed 😥", Toast.LENGTH_SHORT).show()
+                    }
             }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Image Upload Failed", Toast.LENGTH_SHORT).show()
-                }
         } else {
-            Toast.makeText(this, "Please Select an image", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Please Select an image 😊", Toast.LENGTH_SHORT).show()
         }
     }
 
+        private fun uploadImageToSupabase(uri: Uri, onSuccess: (imageUrl: String) -> Unit) {
+            // 1. ضغط الصورة وتحويلها إلى ByteArray
+            val inputStream = contentResolver.openInputStream(uri)
+            val bitmap = BitmapFactory.decodeStream(inputStream)
+            inputStream?.close()
 
-//            if (fileBytes != null) {
-//                uploadToSupabase(fileBytes, "$newItemKey.jpg") { imageUrl ->
-//                    if (imageUrl != null) {
-//                        val newItem = AllMenu(
-//                            foodName = foodName,
-//                            foodPrice = foodPrice,
-//                            foodDescription = foodDescription,
-//                            foodIngredient = foodIngredint,
-//                            foodImage = imageUrl
-//                        )
-//                        menuRef.child(newItemKey).setValue(newItem)
-//                            .addOnSuccessListener {
-//                                Toast.makeText(this, "Data Uploaded Successfully", Toast.LENGTH_SHORT).show()
-//                            }
-//                            .addOnFailureListener {
-//                                Toast.makeText(this, "Data Upload Failed", Toast.LENGTH_SHORT).show()
-//                            }
-//                    } else {
-//                        Toast.makeText(this, "Image upload failed", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            }
-//        } else {
-//            Toast.makeText(this, "Please Select an image", Toast.LENGTH_SHORT).show()
-//        }
-//    }
+            val outputStream = java.io.ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream) // جودة 50%
+            val compressedBytes = outputStream.toByteArray()
 
-//    private fun uploadToSupabase(fileBytes: ByteArray, fileName: String, callback: (String?) -> Unit) {
-//        val supabaseUrl = "https://wjejxjzodprauxdjtiys.supabase.co"
-//        val bucket = "images"
-//        val apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqZWp4anpvZHByYXV4ZGp0aXlzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYzNzYxNDMsImV4cCI6MjA2MTk1MjE0M30.5LsQa51okC7owyYLPTTB03XFw0srhjwgAks260ERmIo"
-//
-//        val uploadUrl = "$supabaseUrl/storage/v1/object/$bucket/$fileName"
-//        val client = okhttp3.OkHttpClient()
-//
-//        val requestBody = okhttp3.RequestBody.create(
-//            "image/jpeg".toMediaTypeOrNull(),
-//            fileBytes
-//        )
-//
-//        val request = okhttp3.Request.Builder()
-//            .url(uploadUrl)
-//            .header("Authorization", "Bearer $apiKey")
-//            .header("Content-Type", "image/jpeg")
-//            .put(requestBody)
-//            .build()
-//
-//        client.newCall(request).enqueue(object : okhttp3.Callback {
-//            override fun onFailure(call: okhttp3.Call, e: IOException) {
-//                e.printStackTrace()
-//                runOnUiThread { callback(null) }
-//            }
-//
-//            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-//                if (response.isSuccessful) {
-//                    // Public URL if the bucket is public
-//                    val imageUrl = "$supabaseUrl/storage/v1/object/public/$bucket/$fileName"
-//                    runOnUiThread { callback(imageUrl) }
-//                } else {
-////                    println("Upload failed: ${response.code()} - ${response.body()?.string()}")
-//                    runOnUiThread { callback(null) }
-//                }
-//            }
-//        })
-//    }
+            // 2. تجهيز البيانات للرفع
+            val requestFile = compressedBytes.toRequestBody("image/jpeg".toMediaTypeOrNull1())
+            val fileName = "compressed_${System.currentTimeMillis()}.jpg"
+            val body = MultipartBody.Part.createFormData("file", fileName, requestFile)
+
+            // 3. تنفيذ الاتصال عبر Retrofit
+            val call = SupabaseClient.service.uploadImage(
+                SupabaseClient.getApiKey(),
+                SupabaseClient.getAuthorization(),
+                body,
+                "images",
+                fileName
+            )
+
+
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if (response.isSuccessful) {
+//                        val imageUrl = "https://supabase.com/dashboard/project/wjejxjzodprauxdjtiys/storage/buckets/images/$fileName"
+                        val imageUrl = "https://wjejxjzodprauxdjtiys.supabase.co/storage/v1/object/public/images/$fileName"
+//                        Glide.with(this@AddItemActivity)
+//                            .load(imageUrl)
+//                            .into(binding.selectedImage)
+                        onSuccess(imageUrl)
+                    } else {
+                        Log.e("Supabase", "Upload failed: code=${response.code()} body=${response.errorBody()?.string()}")
+                        Toast.makeText(this@AddItemActivity, "Failed uploading image: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(this@AddItemActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
 
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {

@@ -27,6 +27,8 @@ composoBom = "2024.09.02"
 firebaseBom = "33.3.0"
 gmsGoogleServices = "4.4.2"
 firebaseStorage = "21.0.1"
+supabaseStorage = "0.1.0"
+datastoreCoreAndroid = "1.1.6"
 
 
 
@@ -61,6 +63,8 @@ play-services-auth = { module = "com.google.android.gms:play-services-auth", ver
 androidx-credentials-new = { group = "androidx.credentials", name = "credentials", version.ref = "credentialsApi" }
 androidx-credentials-play-services = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentialsApi" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
+supabase-storage = { module = "io.github.jakepurple13.supabase-kt:supabase-storage", version.ref = "supabaseStorage" }
+androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastoreCoreAndroid" }
 
 
 [plugins]
