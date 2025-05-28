@@ -1,19 +1,25 @@
 package com.example.adminyummibox.adapter
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.adminyummibox.databinding.PendingOrderItemBinding
 
-class PendingOrderAdapter(private val CustomerNamesItem: ArrayList<String>,
-                          private val Quantity: ArrayList<String>,
-                          private val FoodImagesItem: ArrayList<Int>,
-                          private val context: Context):
-    RecyclerView.Adapter<PendingOrderAdapter.PandingOrderViewHolder>() {
+class PendingOrderAdapter(private val context: Context,
+                          private val customerNamesItem: MutableList<String>,
+                          private val quantity: MutableList<String>,
+                          private val foodImagesItem: MutableList<String>,
+                          private val itemClicked: OnItemClicked
+): RecyclerView.Adapter<PendingOrderAdapter.PandingOrderViewHolder>() {
 
 
+    interface OnItemClicked{
+        fun onItemClickListener(position: Int)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PandingOrderViewHolder {
         val binding = PendingOrderItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PandingOrderViewHolder(binding)
@@ -23,16 +29,19 @@ class PendingOrderAdapter(private val CustomerNamesItem: ArrayList<String>,
        holder.bind(position)
    }
 
-    override fun getItemCount(): Int = CustomerNamesItem.size
+    override fun getItemCount(): Int = customerNamesItem.size
 
 
     inner class PandingOrderViewHolder(private val binding: PendingOrderItemBinding): RecyclerView.ViewHolder(binding.root) {
         private var isAccepted = false
         fun bind(position: Int) {
             binding.apply {
-                customerName.text = CustomerNamesItem[position]
-                pendingOrderQuantity.text = Quantity[position]
-                orderedFoodImage.setImageResource(FoodImagesItem[position])
+                customerName.text = customerNamesItem[position]
+                pendingOrderQuantity.text = quantity[position]
+//                orderedFoodImage.setImageResource(foodImagesItem[position])
+                var uriString = foodImagesItem[position]
+                var uri = Uri.parse(uriString)
+                Glide.with(context).load(uri).into(orderedFoodImage)
 
                 orderedAcceptButton.apply {
                     if (!isAccepted){
@@ -46,11 +55,14 @@ class PendingOrderAdapter(private val CustomerNamesItem: ArrayList<String>,
                             isAccepted = true
                             showToast("Order is accepted")
                         } else{
-                            CustomerNamesItem.removeAt(adapterPosition)
+                            customerNamesItem.removeAt(adapterPosition)
                             notifyItemRemoved(adapterPosition)
                             showToast("Order is dispatched")
                         }
                     }
+                }
+                itemView.setOnClickListener {
+                    itemClicked.onItemClickListener(position)
                 }
             }
         }
@@ -58,4 +70,8 @@ class PendingOrderAdapter(private val CustomerNamesItem: ArrayList<String>,
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
+}
+
+fun PendingOrderAdapter.OnItemClicked.onItemClickListener(position: Int) {
+    TODO("Not yet implemented")
 }
