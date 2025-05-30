@@ -79,11 +79,12 @@ class AddItemActivity : AppCompatActivity() {
             //  استخدم Supabase بدل Firebase Storage
             uploadImageToSupabase(foodImageUri!!) { imageUrl ->
                 val newItem = AllMenu(
+                    newItemKey,
                     foodName = foodName,
                     foodPrice = foodPrice,
                     foodDescription = foodDescription,
-                    foodIngredient = foodIngredint,
-                    foodImage = imageUrl
+                    foodImage = imageUrl,
+                    foodIngredient = foodIngredint
                 )
 
                 menuRef.child(newItemKey).setValue(newItem)

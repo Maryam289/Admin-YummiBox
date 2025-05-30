@@ -2,6 +2,7 @@ package com.example.adminyummibox
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.adminyummibox.adapter.MenuItemAdapter
@@ -28,12 +29,6 @@ class AllItemActivity : AppCompatActivity() {
         databaseReference = FirebaseDatabase.getInstance().reference
         retrieveMenuItem()
 
-//        val menuFoodName = listOf("Herring Under a Fur Coat", "Chicken Kiev", "Pancakes with Red Caviar")
-//        val menuItemPrice = listOf("$5", "$7", "$8")
-//        val foodImage = listOf(
-//            R.drawable.herring_under_afur_coat,
-//            R.drawable.chicken_kiev,
-//            R.drawable.pancakeswith_red_caviar)
 
         binding.backButton.setOnClickListener {
             finish()
@@ -67,8 +62,24 @@ class AllItemActivity : AppCompatActivity() {
         })
     }
     private fun setAdapter() {
-        val adapter = MenuItemAdapter(this@AllItemActivity, menuItems, databaseReference)
+        val adapter = MenuItemAdapter(this@AllItemActivity, menuItems, databaseReference){ position ->
+            deleteMenuItem(position)
+        }
         binding.MenuRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.MenuRecyclerView.adapter = adapter
+    }
+
+    private fun deleteMenuItem(position: Int) {
+        val menuItemToDelete = menuItems[position]
+        val menuItemKey = menuItemToDelete.key
+        val foodMenuReference = database.reference.child("menu").child(menuItemKey!!)
+        foodMenuReference.removeValue().addOnCompleteListener { task ->
+            if (task.isSuccessful){
+                menuItems.removeAt(position)
+                binding.MenuRecyclerView.adapter?.notifyItemRemoved(position)
+            }else{
+                Toast.makeText(this, "Item not deleted 😥", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

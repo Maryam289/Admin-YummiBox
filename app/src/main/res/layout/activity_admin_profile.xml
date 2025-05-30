@@ -91,6 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_weight="1"
+            android:textColor="@color/gray"
             android:fontFamily="@font/lato_regular"
             android:text="Name"
             android:inputType="text"
@@ -132,6 +133,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/gray"
             android:fontFamily="@font/lato_regular"
             android:text="Addressfbvnvdfkvndbndlzvndfbndfbndflbndfbndfbndfbndfbndfbndfbdnfzbznbdbndfbndfkbndf"
             android:inputType="textMultiLine"
@@ -169,6 +171,7 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_weight="1"
+            android:textColor="@color/gray"
             android:fontFamily="@font/lato_regular"
             android:text="Email"
             android:inputType="textEmailAddress"
@@ -208,6 +211,7 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_weight="1"
+            android:textColor="@color/gray"
             android:fontFamily="@font/lato_regular"
             android:text="123456789"
             android:inputType="phone"
@@ -246,6 +250,7 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_weight="1"
+            android:textColor="@color/gray"
             android:fontFamily="@font/lato_regular"
             android:text="Password"
             android:inputType="textPassword"
@@ -256,6 +261,7 @@
 
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/saveInformationButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"

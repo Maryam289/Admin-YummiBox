@@ -81,7 +81,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/pendingInformationImage" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/pendingOrdersNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -119,7 +119,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/completedOrderNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -155,6 +155,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
             <TextView
+                android:id="@+id/wholeTimeEarning"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -383,6 +384,7 @@
         app:layout_constraintTop_toTopOf="@+id/cardView6">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/logoutButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/maincard_shape">

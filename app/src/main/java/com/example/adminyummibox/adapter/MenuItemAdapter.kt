@@ -11,12 +11,10 @@ import com.example.adminyummibox.model.AllMenu
 import com.google.firebase.database.DatabaseReference
 
 class MenuItemAdapter(
-//    private val MenuItemName: ArrayList<String>,
-//    private val MenuItemPrice: ArrayList<String>,
-//    private val MenuItemImage: ArrayList<Int>
     private val context: Context,
     private val menuList: ArrayList<AllMenu>,
-    databaseReference: DatabaseReference
+    databaseReference: DatabaseReference,
+    private val onDeleteClickListener: (position :Int) -> Unit
 ): RecyclerView.Adapter<MenuItemAdapter.AddItemViewHolder>() {
 
     private val itemQuantities = IntArray(menuList.size){ 1 }
@@ -38,7 +36,7 @@ class MenuItemAdapter(
             binding.apply {
                 val quantity = itemQuantities[position]
                 val menuItem = menuList[position]
-                val uriString = menuItem.foodName
+                val uriString = menuItem.foodImage
                 val uri = Uri.parse(uriString)
                 menuFoodName.text = menuItem.foodName
                 menuItemPrice.text = menuItem.foodPrice
@@ -55,10 +53,11 @@ class MenuItemAdapter(
                 }
 
                 deleteButton.setOnClickListener {
-                    val itemPosition = adapterPosition
-                    if (itemPosition != RecyclerView.NO_POSITION){
-                        deleteItem(itemPosition)
-                    }
+                    onDeleteClickListener(position)
+//                    val itemPosition = adapterPosition
+//                    if (itemPosition != RecyclerView.NO_POSITION){
+//                        deleteItem(itemPosition)
+//                    }
                 }
             }
         }
